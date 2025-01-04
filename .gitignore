@@ -1,0 +1,22 @@
+# .gitignore file
+
+# Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Flask logs
+*.log
+
+# Database files (if any)
+*.sqlite3
