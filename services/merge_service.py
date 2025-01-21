@@ -1,6 +1,9 @@
 import os
 import requests
 from tempfile import NamedTemporaryFile
+import ffmpeg
+
+from services import transcribe
 
 def process_and_merge_urls(chunk_urls, output_file_path="merged_video.mp4"):
     try:
@@ -10,7 +13,9 @@ def process_and_merge_urls(chunk_urls, output_file_path="merged_video.mp4"):
         # Merge chunks into a single file
         merge_chunks(downloaded_chunks, output_file_path)
 
-        return f"Video successfully merged to: {output_file_path}"
+        audio_file = extract_audio(output_file_path)
+
+        return transcribe(audio_file)
     except Exception as e:
         raise RuntimeError(f"Error during video merging: {e}")
 
@@ -55,3 +60,7 @@ def merge_chunks(chunk_files, output_file_path):
         print(f"Deleted temporary file: {chunk_file}")
 
     print("All chunks merged and temporary files cleaned up.")
+
+def extract_audio(video_path, audio_path="temp_audio.wav"):
+    ffmpeg.input(video_path).output(audio_path).run(overwrite_output=True)
+    return audio_path
